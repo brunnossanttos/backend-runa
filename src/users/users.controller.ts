@@ -13,6 +13,6 @@ export class UsersController {
   getPostForHashtags(@Param() param): string {
     //to do: add actual logic
 
-    return `all users with username =  ${param.tag}`;
+    return `all users with username =  ${param.tag}!`;
   }
 }
