@@ -2,6 +2,8 @@
 
 Backend API for Runa using Nest framework (NodeJs + Typescript + PostgresSQL)
 
+![Nodejs Workflow](https://github.com/brunnossanttos/backend-runa/actions/workflows/nodejs.yml/badge.svg)
+
 ## Installation
 
 ```bash
