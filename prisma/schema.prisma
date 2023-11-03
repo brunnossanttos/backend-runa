@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String  @id @default(uuid()) @db.Uuid
+  username       String  @unique @db.VarChar(30)
+  name           String  @db.VarChar(50)
+  avatar         String? @db.VarChar(255)
+  bio            String? @db.VarChar(240)
+  followerCount  BigInt
+  followingCount BigInt
+  verified       Boolean @default(false)
+
+  posts           Post[]         @relation("UserPosts")
+  Like            Like[]
+  HashtagPost     HashtagPost[]
+  UserFollowing   UserFollowing? @relation(fields: [userFollowingId], references: [id])
+  userFollowingId String? @db.Uuid
+  Password        Password[]
+  Session         Session[]
+
+  @@map("users")
+}
+
+model Post {
+  id          String   @id @default(uuid()) @db.Uuid
+  text        String   @db.VarChar(240)
+  authorId    String   @db.Uuid
+  images      String[] @db.VarChar(255)
+  likeCount   BigInt
+  repostCount BigInt
+  origPostId  String?  @db.Uuid
+  replyToId   String?  @db.Uuid
+  hashtags    String[]
+  mentions    Json[]
+
+  author User   @relation("UserPosts", fields: [authorId], references: [id])
+  Like   Like[]
+
+  @@map("posts")
+}
+
+model Hashtag {
+  id              String        @id @default(uuid()) @db.Uuid
+  tag             String
+  recentPostCount BigInt
+  HashtagPost     HashtagPost[]
+
+  @@map("hashtags")
+}
+
+model Like {
+  id     String @id @default(uuid()) @db.Uuid
+  postId String @db.Uuid
+  userId String @db.Uuid
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("likes")
+}
+
+model HashtagPost {
+  id        String @id @default(uuid()) @db.Uuid
+  hashtagId String @db.Uuid
+  userId    String @db.Uuid
+
+  hashtag Hashtag @relation(fields: [hashtagId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@map("hashtag_posts")
+}
+
+model UserFollowing {
+  id          String @id @default(uuid()) @db.Uuid
+  followerId  String @db.Uuid
+  followingId String @db.Uuid
+
+  users User[]
+
+  @@map("user_followings")
+}
+
+model Password {
+  id       String @id @default(uuid()) @db.Uuid
+  userId   String @db.Uuid
+  password String @db.VarChar(18)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("passwords")
+}
+
+model Session {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("sessions")
+}
