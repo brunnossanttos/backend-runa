@@ -6,36 +6,36 @@ import {
   Patch,
   Put,
   Delete,
+  Body,
 } from '@nestjs/common';
+import { UserService } from './users.service';
+import { ICreateUserRequestDTO } from './CreateUserDTO';
 
 @Controller('users')
 export class UsersController {
-  @Get('/')
-  getUsers(): string {
-    //to do: add actual logic
-
-    return 'all users';
-  }
+  constructor(private readonly userService: UserService) {}
 
   @Get('/@{userName}')
-  getPostForHashtags(@Param('userName') userName: string): string {
+  getUserByUsername(@Param('userName') userName: string): string {
     //to do: add actual logic
 
     return `all users with userName =  ${userName}!`;
   }
 
   @Get('/:userId')
-  getUserByUsername(@Param('userId') userId: string): string {
+  getUserByUserId(@Param('userId') userId: string): string {
     //to do: add actual logic
 
     return `all users with userId =  ${userId}!`;
   }
 
   @Post('/')
-  createUser() {
-    //to do: add actual logic
-
-    return 'Create User';
+  createUser(@Body() createUserDto: ICreateUserRequestDTO) {
+    try {
+      return this.userService.createUser(createUserDto);
+    } catch (error) {
+      return error;
+    }
   }
 
   @Patch('/:userId')
@@ -53,16 +53,23 @@ export class UsersController {
   }
 
   @Delete('/:userId/follow')
-  deleteUser(@Param('userId') userId: string) {
+  unfollow(@Param('userId') userId: string) {
     //to do: add actual logic
 
     return `delete follow user =  ${userId}!`;
   }
 
   @Get('/:userId/followers')
-  getFollowersOfUser(@Param('userId') userId: string) {
+  getFollowersUsers(@Param('userId') userId: string) {
     //to do: add actual logic
 
     return `all followers for user =  ${userId}!`;
+  }
+
+  @Get('/:userId/followees')
+  getFolloweesUsers(): Promise<any> {
+    //to do: add actual logic
+
+    return this.userService.getUsers();
   }
 }

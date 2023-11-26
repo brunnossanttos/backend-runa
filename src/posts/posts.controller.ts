@@ -3,17 +3,10 @@ import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 @Controller('posts')
 export class PostsController {
   @Get('/')
-  getAllPosts(): string {
+  query(): string {
     //to do: add actual logic
 
-    return 'all posts';
-  }
-
-  @Get('/:postId')
-  getPostDetails(@Param('postId') postId: string) {
-    //to do: add actual logic
-
-    return `post with id = ${postId}`;
+    return 'posts by/reply_to/hashtag';
   }
 
   @Post('/')
@@ -42,5 +35,12 @@ export class PostsController {
     //to do: add actual logic
 
     return `unlike post =  ${postId}!`;
+  }
+
+  @Get('/:postId')
+  getPostDetails(@Param('postId') postId: string) {
+    //to do: add actual logic
+
+    return `post with id = ${postId}`;
   }
 }

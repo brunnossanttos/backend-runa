@@ -16,15 +16,15 @@ model User {
   name           String  @db.VarChar(50)
   avatar         String? @db.VarChar(255)
   bio            String? @db.VarChar(240)
-  followerCount  BigInt
-  followingCount BigInt
+  followerCount  Int?    @default(0)
+  followingCount Int?    @default(0)
   verified       Boolean @default(false)
 
   posts           Post[]         @relation("UserPosts")
   Like            Like[]
   HashtagPost     HashtagPost[]
   UserFollowing   UserFollowing? @relation(fields: [userFollowingId], references: [id])
-  userFollowingId String? @db.Uuid
+  userFollowingId String?        @db.Uuid
   Password        Password[]
   Session         Session[]
 
@@ -36,8 +36,8 @@ model Post {
   text        String   @db.VarChar(240)
   authorId    String   @db.Uuid
   images      String[] @db.VarChar(255)
-  likeCount   BigInt
-  repostCount BigInt
+  likeCount   Int?     @default(0)
+  repostCount Int?     @default(0)
   origPostId  String?  @db.Uuid
   replyToId   String?  @db.Uuid
   hashtags    String[]
@@ -52,7 +52,7 @@ model Post {
 model Hashtag {
   id              String        @id @default(uuid()) @db.Uuid
   tag             String
-  recentPostCount BigInt
+  recentPostCount Int?          @default(0)
   HashtagPost     HashtagPost[]
 
   @@map("hashtags")
