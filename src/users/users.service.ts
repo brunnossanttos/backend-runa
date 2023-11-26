@@ -3,7 +3,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/core/repository/prisma/prisma.service'; // Certifique-se de que o caminho está correto
+import { PrismaService } from '../core/repository/prisma/prisma.service'; // Certifique-se de que o caminho está correto
 import { ICreateUserRequestDTO } from './CreateUserDTO';
 import { User } from '@prisma/client';
 
